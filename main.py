@@ -1,5 +1,5 @@
-from flask import Flask,request,render_template
-
+from flask import Flask, request, render_template
+import forms
 app = Flask(__name__)
 
 
@@ -7,13 +7,28 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-@app.route("/alumnos")
+
+@app.route("/alumnos", methods=("GET", "POST"))
 def alumnos():
-    return render_template("alumnos.html")
+    nom = ''
+    apaterno = ''
+    correo = ''
+    alum_forms = forms.UserForm(request.form)
+    if request.method == 'POST':
+        nom = alum_forms.nombre.data
+        apaterno = alum_forms.apaterno.data
+        correo = alum_forms.email.data
+
+        print("Nombre: {}".format(nom))
+        print("apaterno: {}".format(apaterno))
+        print("correo: {}".format(correo))
+    return render_template("alumnos.html", form=alum_forms, nom=nom, apa=apaterno, c=correo)
+
 
 @app.route("/maestros")
 def maestros():
     return render_template("maestros.html")
+
 
 @app.route("/hola")
 def func():
@@ -45,7 +60,7 @@ def suma(num1, num2):
     return "la suma es: {} + {} = {}".format(num1, num2, num1+num2)
 
 
-@app.route("/multiplicar",methods=("GET","POST"))
+@app.route("/multiplicar", methods=("GET", "POST"))
 def mult():
     if request.method == "POST":
         num1 = request.form.get("n1")
@@ -61,17 +76,20 @@ def mult():
         <input type="submit">
         </form>
         '''
+
+
 @app.route("/formulario1")
 def calculo():
     return render_template("formulario1.html")
 
 
-@app.route("/resultado",methods=("GET","POST"))
+@app.route("/resultado", methods=("GET", "POST"))
 def multe():
     if request.method == "POST":
         num1 = request.form.get("n1")
         num2 = request.form.get("n2")
         return "<h1> El resultado es: {}</h1>".format(str(int(num1)*int(num2)))
+
 
 if __name__ == "__main__":
     app.run(debug=True)
