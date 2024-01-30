@@ -25,6 +25,7 @@ def alumnos():
     return render_template("alumnos.html", form=alum_forms, nom=nom, apa=apaterno, c=correo)
 
 
+
 @app.route("/maestros")
 def maestros():
     return render_template("maestros.html")
